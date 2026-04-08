@@ -1,0 +1,9 @@
+{
+  "name": "10x-Team",
+  "version": "0.1.0",
+  "description": "10x-Team extension for Gemini CLI",
+  "skills_dir": "skills",
+  "hooks": {
+    "session_start": "hooks/session-start"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "10x-Team",
+  "version": "0.1.0",
+  "description": "10x-Team plugin for Cursor",
+  "hooks": "hooks/hooks-cursor.json"
+}
