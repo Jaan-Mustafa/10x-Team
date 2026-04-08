@@ -1,12 +1,12 @@
  {                                                                                                                                        
-    "name": "10x-team",                                                                                                                    
+    "name": "10x-Team",                                                                                                                    
     "owner": {                                                                                                                             
       "name": "Md Rizabul",                                                                                                                
       "email": "mustafamustafa9891@gmail.com"
     },                                                                                                                                     
     "plugins": [  
       {                                                                                                                                    
-        "name": "10x-team",
+        "name": "10x-Team",
         "source": "./",
         "description": "10x-Team Skills plugin for Claude Code for building real world applications like you build with a team",
         "version": "0.1.0"                                                                                                                 
