@@ -77,15 +77,65 @@ This installs the entire team as a Claude Code plugin, making all skills availab
 └── README.md
 ```
 
-## Adding Custom Skills
+## Contributing — Add or Update Skills
 
-Create a new folder under `skills/` with a `SKILL.md` file:
+### Adding a New Skill
+
+1. Create a folder under `skills/` with a `SKILL.md` file:
 
 ```
 skills/my-role/SKILL.md
 ```
 
-Then reload plugins with `/reload-plugins`.
+2. Follow this structure in your `SKILL.md`:
+
+```markdown
+---
+name: my-role
+description: "When this skill should be triggered and what it does."
+---
+
+# Role Title
+
+One-line summary of what this skill helps with.
+
+<HARD-GATE>
+What must happen BEFORE giving recommendations.
+</HARD-GATE>
+
+## Anti-Pattern: "Common Mistake Title"
+Why skipping the process causes problems.
+
+## Checklist
+Ordered steps the skill must follow.
+
+## Process Flow
+Visual flow of the decision process.
+
+## The Process
+Detailed guidance for each phase.
+
+## Key Principles
+Core rules that guide the skill's behavior.
+
+## Anti-Patterns to Flag
+Common mistakes to call out.
+
+## Tone
+How the skill should communicate.
+```
+
+3. Reload plugins:
+
+```
+/reload-plugins
+```
+
+### Updating an Existing Skill
+
+1. Edit the `SKILL.md` file in the relevant `skills/<role>/` folder
+2. Keep the same structure — frontmatter, hard gate, checklist, process, principles
+3. Reload plugins with `/reload-plugins`
 
 ## License
 
