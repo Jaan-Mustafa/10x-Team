@@ -23,6 +23,16 @@ This installs the entire team as a Claude Code plugin, making all skills availab
 
 ## Available Skills
 
+### Orchestrator
+
+| Skill | Role | Use When |
+|-------|------|----------|
+| `/10x-team` | **Full Team Orchestrator** | **Building projects end-to-end — automatically switches between all 12 roles** |
+
+Use `/10x-team` when you want the full team working together. It moves through strategy, design, planning, implementation, testing, and deployment — thinking as the right specialist at each phase.
+
+### Individual Roles
+
 | Skill | Role | Use When |
 |-------|------|----------|
 | `/cto` | Chief Technology Officer | Build vs buy, business case, technical strategy |
@@ -41,6 +51,8 @@ This installs the entire team as a Claude Code plugin, making all skills availab
 ## Usage Examples
 
 ```
+> /10x-team Build me a URL shortener with analytics
+
 > /cto Should we build our own payment system or use Razorpay?
 
 > /principal-architect Design a notification service that handles 10M events/day
@@ -60,6 +72,7 @@ This installs the entire team as a Claude Code plugin, making all skills availab
 │   ├── plugin.json            # Plugin manifest
 │   └── marketplace.json       # Marketplace registry
 ├── skills/
+│   ├── 10x-team/SKILL.md         # Orchestrator — uses all roles
 │   ├── cto/SKILL.md
 │   ├── product-manager/SKILL.md
 │   ├── principal-architect/SKILL.md
