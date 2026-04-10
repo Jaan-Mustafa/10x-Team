@@ -131,15 +131,19 @@ When reviewing any web application, check against:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — check Architect decisions (attack surface), SDE progress (what's been built), DBA decisions (data handling). **Also check your own past Security entries** — what vulnerabilities did you find, what threat model did you define, are past findings resolved?
-3. Read `.10x/status.md` — understand current project phase and progress. Check if your security fixes were implemented
-4. Read `.10x/handoff.md` — understand context from SDE (what was built, what to review). Check Handoff History for your previous handoffs
+2. If it exists, read `.10x/decisions/security.md` — check your own past entries: vulnerabilities found, threat model, past findings resolved?
+3. Read `.10x/decisions/architect.md` — Architect attack surface
+4. Read `.10x/decisions/sde.md` — SDE progress, what's been built
+5. Read `.10x/decisions/dba.md` — DBA data handling decisions
+6. Read `.10x/status.md` — understand current project phase and progress. Check if your security fixes were implemented
+7. Read `.10x/handoff.md` — understand context from SDE (what was built, what to review). Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append your findings: threat model, auth/authz design, vulnerabilities found, compliance requirements. Mark severity (CRITICAL/HIGH/MEDIUM/LOW)
-2. **Update `.10x/status.md`** — mark your tasks done, add blocking bugs if critical vulnerabilities found
-3. **Write to `.10x/handoff.md`** — pass security fixes needed and hardening checklist to SDE, infra hardening to DevOps. Move current handoff to History section, write new Current Handoff
-4. Commit state files: `state(security): [what changed]`
+1. **Write to `.10x/decisions/security.md`** — your findings: threat model, auth/authz design, vulnerabilities found, compliance requirements. Mark severity (CRITICAL/HIGH/MEDIUM/LOW)
+2. **Write security audit to `.10x/reviews/YYYY-MM-DD-security-review.md`** — detailed audit report
+3. **Update `.10x/status.md`** — mark your tasks done, add blocking bugs if critical vulnerabilities found
+4. **Write to `.10x/handoff.md`** — pass security fixes needed and hardening checklist to SDE, infra hardening to DevOps. Move current handoff to History section, write new Current Handoff
+5. Commit state files: `state(security): [what changed]`
 
 ## Tone
 

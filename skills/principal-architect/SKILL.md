@@ -148,12 +148,14 @@ Match depth of analysis to impact:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — check CTO decisions (tech direction) and PM decisions (requirements, scope). **Also check your own past Architect entries** — what architecture did you propose, are there design decisions that constrain the current work?
-3. Read `.10x/status.md` — understand current project phase and progress. Check if your architecture is being implemented as designed
-4. Read `.10x/handoff.md` — understand context passed from CTO/PM. Check Handoff History for your previous handoffs
+2. If it exists, read `.10x/decisions/architect.md` — check your own past entries: architecture proposed, design constraints
+3. Read `.10x/decisions/cto.md` — CTO tech direction
+4. Read `.10x/decisions/product-manager.md` — PM requirements and scope
+5. Read `.10x/status.md` — understand current project phase and progress. Check if your architecture is being implemented as designed
+6. Read `.10x/handoff.md` — understand context passed from CTO/PM. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append your architecture decisions: system design, component boundaries, API contracts, data flow, failure modes
+1. **Write to `.10x/decisions/architect.md`** — your architecture decisions: system design, component boundaries, API contracts, data flow, failure modes
 2. **Update `.10x/status.md`** — mark your tasks done, update phase to Design complete if transitioning
 3. **Write to `.10x/handoff.md`** — pass architecture diagram, component list, integration points to Staff Engineer and EM. Move current handoff to History section, write new Current Handoff
 4. Commit state files: `state(architect): [what changed]`

@@ -118,12 +118,14 @@ Follow what's already in the codebase. When in doubt:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — read ALL prior decisions (CTO strategy, PM requirements, Architect design, Staff patterns, EM task list, Senior approach, DBA schema, Security constraints). **Also check your own past SDE entries** — what did you build, what deviations did you make, what tech debt did you flag?
-3. Read `.10x/status.md` — understand current phase, find your assigned tasks. Check which of your tasks are done vs remaining
-4. Read `.10x/handoff.md` — understand context passed from Senior Engineer. Check Handoff History for your previous handoffs
+2. If it exists, read **ALL decision files** in `.10x/decisions/` — SDE is the convergence point where all decisions become code:
+   - `cto.md` (strategy), `product-manager.md` (requirements), `architect.md` (design), `staff-engineer.md` (patterns), `engineering-manager.md` (task list), `senior-engineer.md` (approach), `dba.md` (schema), `security.md` (constraints)
+3. Read `.10x/decisions/sde.md` — check your own past entries: what was built, deviations, tech debt flagged
+4. Read `.10x/status.md` — understand current phase, find your assigned tasks. Check which of your tasks are done vs remaining
+5. Read `.10x/handoff.md` — understand context passed from Senior Engineer. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append what was actually built, deviations from plan, tech debt created
+1. **Write to `.10x/decisions/sde.md`** — what was actually built, deviations from plan, tech debt created
 2. **Update `.10x/status.md`** — mark your tasks as done or in-progress, update task progress
 3. **Write to `.10x/handoff.md`** — pass what was built, what to test, what to review to QA and Security Engineer. Move current handoff to History section, write new Current Handoff
 4. Commit state files: `state(sde): [what changed]`

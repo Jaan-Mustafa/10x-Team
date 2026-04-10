@@ -153,12 +153,13 @@ Apply different rigor based on reversibility:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — **check your own past CTO entries** for consistency with prior strategic decisions. Also check other roles' decisions for context
-3. Read `.10x/status.md` — understand current project phase and progress. Check outcomes of past decisions you made
-4. Read `.10x/handoff.md` — understand context passed from any previous role. Check Handoff History for your previous handoffs
+2. If it exists, read `.10x/decisions/cto.md` — check your own past strategic decisions for consistency
+3. Scan other decision files for context: `.10x/decisions/product-manager.md`, `.10x/decisions/architect.md`
+4. Read `.10x/status.md` — understand current project phase and progress. Check outcomes of past decisions you made
+5. Read `.10x/handoff.md` — understand context passed from any previous role. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append your strategic decisions: build/buy verdict, tech stack choices, risk assessment, business justification
+1. **Write to `.10x/decisions/cto.md`** — your strategic decisions: build/buy verdict, tech stack choices, risk assessment, business justification
 2. **Update `.10x/status.md`** — mark your tasks done, update phase if transitioning, flag any risks
 3. **Write to `.10x/handoff.md`** — pass business context, constraints, budget, timeline to PM and Architect. Move current handoff to History section, write new Current Handoff
 4. Commit state files: `state(cto): [what changed]`

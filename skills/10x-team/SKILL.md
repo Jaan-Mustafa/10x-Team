@@ -38,16 +38,42 @@ The difference between a solo developer and a team is that a team covers blind s
 
 The orchestrator manages the shared state across all phases. This is how roles communicate across conversations.
 
+### Folder Structure
+```
+.10x/
+├── status.md                    # phase tracking + task progress
+├── handoff.md                   # current role-to-role context
+├── decisions/                   # one file per role
+│   ├── cto.md                   # strategy, build/buy, tech stack
+│   ├── product-manager.md       # requirements, scope, user stories
+│   ├── architect.md             # system design, components, boundaries
+│   ├── staff-engineer.md        # patterns, standards, cross-cutting
+│   ├── engineering-manager.md   # task breakdown, estimates, sequencing
+│   ├── senior-engineer.md       # implementation approach, code review
+│   ├── sde.md                   # what was built, deviations, tech debt
+│   ├── dba.md                   # schema, migrations, indexing
+│   ├── security.md              # threat model, vulnerabilities, auth
+│   ├── qa.md                    # test results, bugs, coverage
+│   ├── devops.md                # CI/CD, deploy strategy, rollback
+│   └── sre.md                   # SLOs, monitoring, runbooks
+├── specs/                       # design docs from brainstorming
+│   └── YYYY-MM-DD-feature.md
+└── reviews/                     # QA reports + security audits
+    └── YYYY-MM-DD-review.md
+```
+
 ### At Project Start
-1. Check if `.10x/` directory exists — if not, create it by running `/init-project`
-2. Read all state files to understand where the project stands:
-   - `.10x/decisions.md` — all prior decisions from every role
+1. Check if `.10x/` directory exists — if not, create it with the folder structure above
+2. Read state files to understand where the project stands:
+   - `.10x/decisions/` — read role-specific decision files relevant to current phase
    - `.10x/status.md` — current phase, task progress, blockers
    - `.10x/handoff.md` — context from the last active role
+   - `.10x/specs/` — approved design documents
+   - `.10x/reviews/` — QA reports and security audits
 
 ### During Phase Transitions
 When moving from one phase to the next:
-1. The finishing role writes its decisions to `.10x/decisions.md`
+1. The finishing role writes its decisions to `.10x/decisions/<role>.md`
 2. The finishing role updates `.10x/status.md` with phase change and task completion
 3. The finishing role writes a handoff in `.10x/handoff.md` for the next role
 4. Commit state: `state([role]): [phase] complete, transitioning to [next phase]`
@@ -55,8 +81,9 @@ When moving from one phase to the next:
 ### State Awareness Rules
 - **Always read state before acting in any role** — never start a phase blind
 - **Always write state after completing a phase** — never leave the next role without context
-- **SDE reads ALL decisions** — it's the convergence point where all decisions become code
-- **SRE reads ALL decisions** — it needs full system understanding for reliability
+- **Each role reads only the decision files it needs** — not everything
+- **SDE reads ALL decision files** — it's the convergence point where all decisions become code
+- **SRE reads ALL decision files** — it needs full system understanding for reliability
 - **If state conflicts with current code, trust the code** — update the stale state
 
 ## Full Project Delivery Flow
@@ -185,7 +212,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What's the minimum scope that delivers value?
 
 **Output:** Clear problem statement, success criteria, scope decision.
-**State:** Write CTO + PM decisions to `.10x/decisions.md`. Update phase in `.10x/status.md`. Handoff business context and requirements to Architect.
+**State:** Write CTO decisions to `.10x/decisions/cto.md`, PM decisions to `.10x/decisions/product-manager.md`. Update phase in `.10x/status.md`. Handoff business context and requirements to Architect.
 
 ## Phase 2: Design — How Should We Build It?
 
@@ -200,7 +227,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What existing code can we reuse?
 
 **Output:** Architecture decision, component design, data flow.
-**State:** Write Architect + Staff decisions to `.10x/decisions.md`. Update phase. Handoff system design to EM.
+**State:** Write Architect decisions to `.10x/decisions/architect.md`, Staff decisions to `.10x/decisions/staff-engineer.md`. Update phase. Handoff system design to EM.
 
 ## Phase 3: Planning — How Do We Deliver It?
 
@@ -215,7 +242,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Where are the tricky parts?
 
 **Output:** Ordered task list with clear implementation approach for each.
-**State:** Write EM + Senior decisions to `.10x/decisions.md`. Set full task list in `.10x/status.md`. Handoff task list to SDE.
+**State:** Write EM decisions to `.10x/decisions/engineering-manager.md`, Senior decisions to `.10x/decisions/senior-engineer.md`. Set full task list in `.10x/status.md`. Handoff task list to SDE.
 
 ## Phase 4: Implementation — Write the Code
 
@@ -235,7 +262,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Is the migration safe for production data?
 
 **Output:** Working, tested code committed in logical chunks.
-**State:** Write SDE + DBA decisions to `.10x/decisions.md`. Update task progress in `.10x/status.md`. Handoff what was built to QA and Security.
+**State:** Write SDE decisions to `.10x/decisions/sde.md`, DBA decisions to `.10x/decisions/dba.md`. Update task progress in `.10x/status.md`. Handoff what was built to QA and Security.
 
 ## Phase 5: Verification — Does It Work? Is It Safe?
 
@@ -250,7 +277,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Are secrets handled properly?
 
 **Output:** Verified, secure code with appropriate test coverage.
-**State:** Write QA + Security findings to `.10x/decisions.md`. Update test results and security status in `.10x/status.md`. Handoff release readiness to DevOps.
+**State:** Write QA findings to `.10x/decisions/qa.md` and `.10x/reviews/`, Security findings to `.10x/decisions/security.md`. Update test results and security status in `.10x/status.md`. Handoff release readiness to DevOps.
 
 ## Phase 6: Delivery — Ship It and Keep It Running
 
@@ -265,7 +292,7 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What's the runbook if this breaks at 3 AM?
 
 **Output:** Deployed, monitored, operable system.
-**State:** Write DevOps + SRE decisions to `.10x/decisions.md`. Final sign-off in `.10x/status.md` (phase: Delivery Complete). Handoff runbook and dashboards to team.
+**State:** Write DevOps decisions to `.10x/decisions/devops.md`, SRE decisions to `.10x/decisions/sre.md`. Final sign-off in `.10x/status.md` (phase: Delivery Complete). Handoff runbook and dashboards to team.
 
 ---
 

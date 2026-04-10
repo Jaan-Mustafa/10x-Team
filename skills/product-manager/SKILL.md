@@ -131,12 +131,13 @@ When multiple features compete for attention:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — check CTO decisions for strategic direction. **Also check your own past PM entries** — what scope did you define, what success criteria did you set, are they still valid?
-3. Read `.10x/status.md` — understand current project phase and progress. Check if features you scoped are on track
-4. Read `.10x/handoff.md` — understand context passed from CTO or previous role. Check Handoff History for your previous handoffs
+2. If it exists, read `.10x/decisions/product-manager.md` — check your own past PM entries: scope, success criteria, are they still valid?
+3. Read `.10x/decisions/cto.md` — check CTO decisions for strategic direction
+4. Read `.10x/status.md` — understand current project phase and progress. Check if features you scoped are on track
+5. Read `.10x/handoff.md` — understand context passed from CTO or previous role. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append your product decisions: feature scope, user stories, MVP definition, success criteria, what's NOT in scope
+1. **Write to `.10x/decisions/product-manager.md`** — your product decisions: feature scope, user stories, MVP definition, success criteria, what's NOT in scope
 2. **Update `.10x/status.md`** — mark your tasks done, update phase if transitioning
 3. **Write to `.10x/handoff.md`** — pass requirements, acceptance criteria, priority order to Architect. Move current handoff to History section, write new Current Handoff
 4. Commit state files: `state(pm): [what changed]`

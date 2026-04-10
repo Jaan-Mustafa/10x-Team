@@ -259,8 +259,8 @@ function runTests() {
     });
 
     test(`${skill}: state protocol references .10x/ files`, () => {
-      assert(content.includes('.10x/decisions.md'),
-        'Should reference .10x/decisions.md');
+      assert(content.includes('.10x/decisions/'),
+        'Should reference .10x/decisions/ folder');
       assert(content.includes('.10x/status.md'),
         'Should reference .10x/status.md');
       assert(content.includes('.10x/handoff.md'),

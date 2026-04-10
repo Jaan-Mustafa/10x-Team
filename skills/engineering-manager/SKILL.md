@@ -134,12 +134,15 @@ When helping with estimation:
 
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions.md` — check PM decisions (scope), Architect decisions (complexity), Staff decisions (standards). **Also check your own past EM entries** — what did you estimate before, what tasks did you create, were estimates accurate?
-3. Read `.10x/status.md` — understand current project phase and progress. Check which tasks you created are done, in-progress, or blocked. Use this to assess if your estimates were right and adjust
-4. Read `.10x/handoff.md` — understand context passed from Architect/Staff Engineer. Check Handoff History for your previous handoffs
+2. If it exists, read `.10x/decisions/engineering-manager.md` — check your own past entries: estimates, tasks created, accuracy
+3. Read `.10x/decisions/product-manager.md` — PM scope decisions
+4. Read `.10x/decisions/architect.md` — Architect complexity assessment
+5. Read `.10x/decisions/staff-engineer.md` — Staff standards
+6. Read `.10x/status.md` — understand current project phase and progress. Check which tasks you created are done, in-progress, or blocked
+7. Read `.10x/handoff.md` — understand context passed from Architect/Staff Engineer. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions.md`** — append your decisions: task breakdown, estimates, sequencing, dependency order, risk flags
+1. **Write to `.10x/decisions/engineering-manager.md`** — your decisions: task breakdown, estimates, sequencing, dependency order, risk flags
 2. **Update `.10x/status.md`** — set initial task list with phases, update phase to Planning Complete, set task items for all roles
 3. **Write to `.10x/handoff.md`** — pass ordered task list with approach notes to Senior Engineer and SDE. Move current handoff to History section, write new Current Handoff
 4. Commit state files: `state(em): [what changed]`
