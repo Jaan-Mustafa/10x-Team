@@ -9,7 +9,7 @@
         "name": "10x-Team",
         "source": "./",
         "description": "10x-Team Skills plugin for Claude Code for building real world applications like you build with a team",
-        "version": "0.1.2"                                                                                                                 
+        "version": "0.2.0"                                                                                                                 
       }
     ]                                                                                                                                      
   } 

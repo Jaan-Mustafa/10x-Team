@@ -48,6 +48,45 @@ Use `/10x-team` when you want the full team working together. It moves through s
 | `/qa-engineer` | QA Engineer | Testing strategy, test plans |
 | `/engineering-manager` | Engineering Manager | Team processes, sprint planning, delivery |
 
+## Project State — How Roles Communicate
+
+Skills share context across conversations through a file-based state system in `.10x/`.
+
+### Setup
+
+```
+> /init-project
+```
+
+This creates three state files:
+
+| File | Purpose | Who Writes |
+|------|---------|------------|
+| `.10x/decisions.md` | Decision log — what was decided, by whom, why | Every role appends after deciding |
+| `.10x/status.md` | Progress tracker — current phase, tasks, blockers | Every role updates after acting |
+| `.10x/handoff.md` | Role-to-role context — what the next role needs to know | Every role writes before finishing |
+
+### How It Works
+
+```
+/cto decides "Use Razorpay"
+  → writes decision to .10x/decisions.md
+  → writes handoff context for PM and Architect
+
+/principal-architect designs the payment service
+  → reads CTO decision from .10x/decisions.md ✓
+  → reads handoff context from .10x/handoff.md ✓
+  → designs with full context
+  → writes architecture decisions + handoff for SDE
+
+/sde implements the payment webhook
+  → reads ALL prior decisions ✓
+  → knows: Razorpay, event-driven architecture, schema design
+  → codes with full team context
+```
+
+Every role reads state before acting and writes state after deciding. See [ADR-001](docs/adr/001-project-state-communication.md) for the full design.
+
 ## Usage Examples
 
 ```
@@ -87,6 +126,7 @@ Use `/10x-team` when you want the full team working together. It moves through s
 │   └── engineering-manager/SKILL.md
 ├── agents/
 ├── commands/
+│   └── init-project.md         # Initialize .10x/ project state
 └── README.md
 ```
 

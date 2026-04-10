@@ -27,6 +27,7 @@ const REQUIRED_SECTIONS = [
   'Key Principles',
   ['Anti-Patterns to Flag', 'Role Switching Rules'],
   'Tone',
+  'Project State Protocol',
 ];
 
 // Required frontmatter fields
@@ -234,7 +235,40 @@ function runTests() {
     });
   }
 
-  // ========== 7. Cross-reference validation ==========
+  // ========== 7. Project State Protocol ==========
+  console.log('\n--- Project State Protocol ---');
+
+  for (const skill of skillDirs) {
+    const content = readSkill(skill);
+    if (!content) continue;
+
+    test(`${skill}: has state read instructions`, () => {
+      // Orchestrator uses "At Project Start", individual skills use "Before You Start"
+      const hasReadInstructions = content.includes('Before You Start') ||
+        content.includes('At Project Start');
+      assert(hasReadInstructions,
+        'Should have "Before You Start" or "At Project Start" instructions');
+    });
+
+    test(`${skill}: has state write instructions`, () => {
+      // Orchestrator uses "During Phase Transitions", individual skills use "Before You Finish"
+      const hasWriteInstructions = content.includes('Before You Finish') ||
+        content.includes('During Phase Transitions');
+      assert(hasWriteInstructions,
+        'Should have "Before You Finish" or "During Phase Transitions" instructions');
+    });
+
+    test(`${skill}: state protocol references .10x/ files`, () => {
+      assert(content.includes('.10x/decisions.md'),
+        'Should reference .10x/decisions.md');
+      assert(content.includes('.10x/status.md'),
+        'Should reference .10x/status.md');
+      assert(content.includes('.10x/handoff.md'),
+        'Should reference .10x/handoff.md');
+    });
+  }
+
+  // ========== 8. Cross-reference validation ===========
   console.log('\n--- Cross-Reference Validation ---');
 
   const orchestratorContent = readSkill(ORCHESTRATOR_SKILL);
@@ -245,9 +279,13 @@ function runTests() {
 
   if (orchestratorContent) {
     // Extract all /skill-name references from orchestrator
+    // Exclude command references (init-project, etc.) — only match skills that have SKILL.md
     const skillRefs = orchestratorContent.match(/`\/([a-z][a-z0-9-]*)`/g) || [];
     const referencedSkills = skillRefs.map(ref => ref.replace(/`\//g, '').replace(/`/g, ''));
-    const uniqueRefs = [...new Set(referencedSkills)];
+    const uniqueRefs = [...new Set(referencedSkills)].filter(ref => {
+      const skillPath = path.join(SKILLS_DIR, ref, 'SKILL.md');
+      return fs.existsSync(skillPath);
+    });
 
     test('orchestrator references at least 10 skills', () => {
       assert(uniqueRefs.length >= 10,
@@ -273,7 +311,7 @@ function runTests() {
     }
   }
 
-  // ========== 8. Plugin manifest validation ==========
+  // ========== 9. Plugin manifest validation ==========
   console.log('\n--- Plugin Manifest ---');
 
   const pluginPath = path.join(__dirname, '..', '.claude-plugin', 'plugin.json');
@@ -294,7 +332,7 @@ function runTests() {
     assert(plugin.description, 'Should have description');
   });
 
-  // ========== 9. No broken internal references ==========
+  // ========== 10. No broken internal references ==========
   console.log('\n--- Internal Consistency ---');
 
   test('README.md skill table matches actual skills', () => {
