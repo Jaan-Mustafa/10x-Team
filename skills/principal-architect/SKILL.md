@@ -147,8 +147,8 @@ Match depth of analysis to impact:
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions/architect.md` — check your own past entries: architecture proposed, design constraints
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read `.10x/decisions/architect.md` — check your own past entries: architecture proposed, design constraints. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
 3. Read `.10x/decisions/cto.md` — CTO tech direction
 4. Read `.10x/decisions/product-manager.md` — PM requirements and scope
 5. Read `.10x/status.md` — understand current project phase and progress. Check if your architecture is being implemented as designed

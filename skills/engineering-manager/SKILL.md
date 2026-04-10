@@ -133,8 +133,8 @@ When helping with estimation:
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions/engineering-manager.md` — check your own past entries: estimates, tasks created, accuracy
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read `.10x/decisions/engineering-manager.md` — check your own past entries: estimates, tasks created, accuracy. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
 3. Read `.10x/decisions/product-manager.md` — PM scope decisions
 4. Read `.10x/decisions/architect.md` — Architect complexity assessment
 5. Read `.10x/decisions/staff-engineer.md` — Staff standards

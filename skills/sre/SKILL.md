@@ -123,8 +123,8 @@ When defining or evaluating SLOs:
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read **ALL decision files** in `.10x/decisions/` — SRE needs full system understanding for reliability:
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read **ALL decision files** in `.10x/decisions/` — SRE needs full system understanding for reliability. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them:
    - `cto.md` (strategy), `architect.md` (design), `dba.md` (schema), `security.md` (findings), `devops.md` (config), `sde.md` (what was built)
 3. Read `.10x/decisions/sre.md` — check your own past entries: SLOs defined, alerts set up, runbooks
 4. Read `.10x/reviews/` — check QA reports and security audits

@@ -172,8 +172,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions/staff-engineer.md` — check your own past entries: patterns set, standards defined. Ensure consistency with prior guidance
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read `.10x/decisions/staff-engineer.md` — check your own past entries: patterns set, standards defined. Ensure consistency with prior guidance. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
 3. Read `.10x/decisions/architect.md` — check system design decisions
 4. Read `.10x/status.md` — understand current project phase and progress. Check if your standards are being followed
 5. Read `.10x/handoff.md` — understand context passed from Architect. Check Handoff History for your previous handoffs

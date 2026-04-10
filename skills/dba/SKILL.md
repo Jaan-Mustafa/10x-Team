@@ -124,8 +124,8 @@ For any schema change in production:
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions/dba.md` — check your own past entries: schema designed, indexes added, migration risks flagged
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read `.10x/decisions/dba.md` — check your own past entries: schema designed, indexes added, migration risks flagged. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
 3. Read `.10x/decisions/architect.md` — Architect data flow decisions
 4. Read `.10x/decisions/product-manager.md` — PM data requirements
 5. Read `.10x/decisions/sde.md` — SDE progress, what queries are being written

@@ -117,8 +117,8 @@ Follow what's already in the codebase. When in doubt:
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read **ALL decision files** in `.10x/decisions/` — SDE is the convergence point where all decisions become code:
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read **ALL decision files** in `.10x/decisions/` — SDE is the convergence point where all decisions become code. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them:
    - `cto.md` (strategy), `product-manager.md` (requirements), `architect.md` (design), `staff-engineer.md` (patterns), `engineering-manager.md` (task list), `senior-engineer.md` (approach), `dba.md` (schema), `security.md` (constraints)
 3. Read `.10x/decisions/sde.md` — check your own past entries: what was built, deviations, tech debt flagged
 4. Read `.10x/status.md` — understand current phase, find your assigned tasks. Check which of your tasks are done vs remaining

@@ -63,13 +63,63 @@ The orchestrator manages the shared state across all phases. This is how roles c
 ```
 
 ### At Project Start
-1. Check if `.10x/` directory exists — if not, create it with the folder structure above
-2. Read state files to understand where the project stands:
+1. Check if `.10x/` directory exists
+2. **If `.10x/` exists** — read state files to understand where the project stands:
    - `.10x/decisions/` — read role-specific decision files relevant to current phase
    - `.10x/status.md` — current phase, task progress, blockers
    - `.10x/handoff.md` — context from the last active role
    - `.10x/specs/` — approved design documents
    - `.10x/reviews/` — QA reports and security audits
+3. **If `.10x/` does NOT exist** — check if source code already exists (package.json, src/, config files, etc.)
+   - **No code exists** → fresh project. Create `.10x/` with the folder structure above and proceed to Phase 0 (Brainstorming)
+   - **Code exists** → joining mid-project. Run the **Discovery Protocol** below before proceeding
+
+### Discovery Protocol — Joining an Existing Project
+
+When `.10x/` doesn't exist but the codebase already has code, you must understand what's already built before making any decisions or writing any code.
+
+**Step 1: Scan the codebase**
+- Read project structure (folders, key files, entry points)
+- Read config files (package.json, tsconfig, docker-compose, .env.example, etc.)
+- Identify tech stack, frameworks, dependencies
+- Read README and any existing docs
+
+**Step 2: Understand the architecture**
+- Identify patterns (monolith vs microservices, API style, state management)
+- Read database schema or migrations if they exist
+- Check for existing CI/CD configuration
+- Look at test setup and coverage
+
+**Step 3: Read the history**
+- Check git log for recent activity and commit patterns
+- Identify what's actively being worked on
+- Look for open issues or TODOs in code
+
+**Step 4: Create `.10x/` and pre-populate decisions**
+- Create the folder structure
+- Write what you found to the relevant decision files:
+  - `decisions/cto.md` — tech stack found, architecture style observed
+  - `decisions/architect.md` — component structure, boundaries, data flow discovered
+  - `decisions/staff-engineer.md` — coding patterns, conventions found
+  - `decisions/dba.md` — schema, database choice, migration state
+  - `decisions/devops.md` — CI/CD, deployment setup found
+  - `decisions/sde.md` — what's been built so far
+- Mark all pre-populated decisions with `[DISCOVERED]` tag so roles know these were reverse-engineered, not actively decided
+- Set `.10x/status.md` phase to "Discovery Complete"
+
+**Step 5: Present findings to user**
+> "I've analyzed your existing codebase. Here's what I found:
+> - **Tech stack:** [what was found]
+> - **Architecture:** [pattern identified]
+> - **What's built:** [key features/components]
+> - **What I'm unsure about:** [gaps, assumptions]
+>
+> Does this look right? Anything I'm missing or got wrong?"
+
+**Step 6: User confirms or corrects**
+- Update decision files with corrections
+- Remove `[DISCOVERED]` tag from confirmed decisions
+- Now proceed — either to Brainstorming (for new features) or directly to the appropriate phase
 
 ### During Phase Transitions
 When moving from one phase to the next:

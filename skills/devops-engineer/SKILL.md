@@ -134,8 +134,8 @@ Define rollout plan
 ## Project State Protocol
 
 ### Before You Start (EVERY time)
-1. Check if `.10x/` directory exists in the project root
-2. If it exists, read `.10x/decisions/devops.md` — check your own past entries: pipelines, deploy strategy, rollback plans
+1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
+2. If it exists, read `.10x/decisions/devops.md` — check your own past entries: pipelines, deploy strategy, rollback plans. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
 3. Read `.10x/decisions/architect.md` — Architect infrastructure needs
 4. Read `.10x/decisions/qa.md` — QA release readiness
 5. Read `.10x/decisions/security.md` — Security infra hardening requirements
