@@ -13,6 +13,23 @@ Every project begins with brainstorming — turning the idea into a validated de
 Do NOT write any code, scaffold any project, or take any implementation action until you have brainstormed the idea with the user, presented a design, and received explicit approval. This applies to EVERY project regardless of perceived simplicity. A todo app, a single API endpoint, a config change — all of them go through brainstorming first.
 </HARD-GATE>
 
+## Critical Rule: State Before Progress
+
+<HARD-GATE>
+You MUST write state files BEFORE moving to the next phase. This is NON-NEGOTIABLE.
+
+After EVERY phase, STOP and do this:
+1. Write decisions to `.10x/decisions/<role>.md`
+2. Update `.10x/status.md` with phase completion
+3. Update `.10x/handoff.md` with context for the next role
+4. Commit state files
+
+If you catch yourself writing code without having written `decisions/architect.md` — STOP. Go back. Write the decisions first.
+If you catch yourself at Phase 5 without `decisions/sde.md` — STOP. Go back. Write what was built first.
+
+The state files ARE the team's memory. Without them, you're a solo developer, not a team.
+</HARD-GATE>
+
 ## Anti-Pattern: "Let Me Just Code This"
 
 The difference between a solo developer and a team is that a team covers blind spots. Jumping to code skips the questions that prevent wasted work: Is this worth building? What's the right architecture? What are the edge cases? How do we test it? How do we deploy it? Even a 2-hour task benefits from 5 minutes of thinking across roles. "Simple" projects are where unexamined assumptions cause the most wasted work.
@@ -121,21 +138,6 @@ When `.10x/` doesn't exist but the codebase already has code, you must understan
 - Remove `[DISCOVERED]` tag from confirmed decisions
 - Now proceed — either to Brainstorming (for new features) or directly to the appropriate phase
 
-### During Phase Transitions
-When moving from one phase to the next:
-1. The finishing role writes its decisions to `.10x/decisions/<role>.md`
-2. The finishing role updates `.10x/status.md` with phase change and task completion
-3. The finishing role writes a handoff in `.10x/handoff.md` for the next role
-4. Commit state: `state([role]): [phase] complete, transitioning to [next phase]`
-
-### State Awareness Rules
-- **Always read state before acting in any role** — never start a phase blind
-- **Always write state after completing a phase** — never leave the next role without context
-- **Each role reads only the decision files it needs** — not everything
-- **SDE reads ALL decision files** — it's the convergence point where all decisions become code
-- **SRE reads ALL decision files** — it needs full system understanding for reliability
-- **If state conflicts with current code, trust the code** — update the stale state
-
 ## Full Project Delivery Flow
 
 ```
@@ -143,28 +145,49 @@ Phase 0: BRAINSTORMING (All roles as needed)
   "What are we building and why? Let's design it together."
         │
         v
+  ── CHECKPOINT: spec written + committed ──
+        │
+        v
 Phase 1: STRATEGY (CTO + PM)
   "Should we build this? What exactly?"
+        │
+        v
+  ── CHECKPOINT: cto.md + product-manager.md written ──
         │
         v
 Phase 2: DESIGN (Architect + Staff Engineer)
   "How should we structure this?"
         │
         v
+  ── CHECKPOINT: architect.md + staff-engineer.md written ──
+        │
+        v
 Phase 3: PLANNING (EM + Senior Engineer)
   "How do we break this down and deliver it?"
+        │
+        v
+  ── CHECKPOINT: engineering-manager.md + senior-engineer.md written ──
         │
         v
 Phase 4: IMPLEMENTATION (SDE + Senior Engineer + DBA)
   "Write the code, design the data model"
         │
         v
+  ── CHECKPOINT: sde.md + dba.md written ──
+        │
+        v
 Phase 5: VERIFICATION (QA + Security Engineer)
   "Does it work? Is it secure?"
         │
         v
+  ── CHECKPOINT: qa.md + security.md + reviews/ written ──
+        │
+        v
 Phase 6: DELIVERY (DevOps + SRE)
   "Ship it and keep it running"
+        │
+        v
+  ── CHECKPOINT: devops.md + sre.md + final sign-off ──
 ```
 
 ---
@@ -228,7 +251,7 @@ You MUST complete these steps in order:
 ### After the Design Is Approved
 
 **Write the spec:**
-- Save the validated design to a spec file (e.g., `docs/specs/YYYY-MM-DD-<topic>-design.md`)
+- Save the validated design to `.10x/specs/YYYY-MM-DD-<topic>-design.md`
 - User preferences for spec location override this default
 - Commit the design document
 
@@ -262,7 +285,16 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What's the minimum scope that delivers value?
 
 **Output:** Clear problem statement, success criteria, scope decision.
-**State:** Write CTO decisions to `.10x/decisions/cto.md`, PM decisions to `.10x/decisions/product-manager.md`. Update phase in `.10x/status.md`. Handoff business context and requirements to Architect.
+
+<HARD-GATE>
+STOP. Before moving to Phase 2, you MUST:
+- [ ] Write `.10x/decisions/cto.md` — strategy, build/buy verdict, tech direction
+- [ ] Write `.10x/decisions/product-manager.md` — scope, user stories, success criteria
+- [ ] Update `.10x/status.md` — phase: Strategy Complete
+- [ ] Update `.10x/handoff.md` — context for Architect
+- [ ] Commit state files: `state(strategy): phase 1 complete`
+DO NOT proceed to Design until all boxes are checked.
+</HARD-GATE>
 
 ## Phase 2: Design — How Should We Build It?
 
@@ -277,7 +309,16 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What existing code can we reuse?
 
 **Output:** Architecture decision, component design, data flow.
-**State:** Write Architect decisions to `.10x/decisions/architect.md`, Staff decisions to `.10x/decisions/staff-engineer.md`. Update phase. Handoff system design to EM.
+
+<HARD-GATE>
+STOP. Before moving to Phase 3, you MUST:
+- [ ] Write `.10x/decisions/architect.md` — system design, components, boundaries, failure modes
+- [ ] Write `.10x/decisions/staff-engineer.md` — patterns, standards, cross-cutting concerns
+- [ ] Update `.10x/status.md` — phase: Design Complete
+- [ ] Update `.10x/handoff.md` — context for EM
+- [ ] Commit state files: `state(design): phase 2 complete`
+DO NOT proceed to Planning until all boxes are checked.
+</HARD-GATE>
 
 ## Phase 3: Planning — How Do We Deliver It?
 
@@ -292,7 +333,16 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Where are the tricky parts?
 
 **Output:** Ordered task list with clear implementation approach for each.
-**State:** Write EM decisions to `.10x/decisions/engineering-manager.md`, Senior decisions to `.10x/decisions/senior-engineer.md`. Set full task list in `.10x/status.md`. Handoff task list to SDE.
+
+<HARD-GATE>
+STOP. Before moving to Phase 4, you MUST:
+- [ ] Write `.10x/decisions/engineering-manager.md` — task breakdown, estimates, sequencing
+- [ ] Write `.10x/decisions/senior-engineer.md` — implementation approach per task
+- [ ] Update `.10x/status.md` — phase: Planning Complete, full task list added
+- [ ] Update `.10x/handoff.md` — ordered task list for SDE
+- [ ] Commit state files: `state(planning): phase 3 complete`
+DO NOT write any code until all boxes are checked.
+</HARD-GATE>
 
 ## Phase 4: Implementation — Write the Code
 
@@ -312,7 +362,16 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Is the migration safe for production data?
 
 **Output:** Working, tested code committed in logical chunks.
-**State:** Write SDE decisions to `.10x/decisions/sde.md`, DBA decisions to `.10x/decisions/dba.md`. Update task progress in `.10x/status.md`. Handoff what was built to QA and Security.
+
+<HARD-GATE>
+STOP. Before moving to Phase 5, you MUST:
+- [ ] Write `.10x/decisions/sde.md` — what was built, deviations from plan, tech debt created
+- [ ] Write `.10x/decisions/dba.md` — schema design, indexing, migration notes (if applicable)
+- [ ] Update `.10x/status.md` — mark implementation tasks done
+- [ ] Update `.10x/handoff.md` — what was built, what to test, what to review
+- [ ] Commit state files: `state(implementation): phase 4 complete`
+DO NOT skip verification. QA and Security MUST review what was built.
+</HARD-GATE>
 
 ## Phase 5: Verification — Does It Work? Is It Safe?
 
@@ -327,7 +386,18 @@ Wait for the user's response. Only proceed to implementation once approved.
 - Are secrets handled properly?
 
 **Output:** Verified, secure code with appropriate test coverage.
-**State:** Write QA findings to `.10x/decisions/qa.md` and `.10x/reviews/`, Security findings to `.10x/decisions/security.md`. Update test results and security status in `.10x/status.md`. Handoff release readiness to DevOps.
+
+<HARD-GATE>
+STOP. Before moving to Phase 6, you MUST:
+- [ ] Write `.10x/decisions/qa.md` — test strategy, coverage, bugs found, quality gates
+- [ ] Write `.10x/decisions/security.md` — threat model, vulnerabilities, auth review
+- [ ] Write QA report to `.10x/reviews/YYYY-MM-DD-qa-report.md`
+- [ ] Write security audit to `.10x/reviews/YYYY-MM-DD-security-review.md`
+- [ ] Update `.10x/status.md` — test results, security status, release readiness
+- [ ] Update `.10x/handoff.md` — release readiness for DevOps
+- [ ] Commit state files: `state(verification): phase 5 complete`
+DO NOT ship without QA and Security sign-off.
+</HARD-GATE>
 
 ## Phase 6: Delivery — Ship It and Keep It Running
 
@@ -342,7 +412,16 @@ Wait for the user's response. Only proceed to implementation once approved.
 - What's the runbook if this breaks at 3 AM?
 
 **Output:** Deployed, monitored, operable system.
-**State:** Write DevOps decisions to `.10x/decisions/devops.md`, SRE decisions to `.10x/decisions/sre.md`. Final sign-off in `.10x/status.md` (phase: Delivery Complete). Handoff runbook and dashboards to team.
+
+<HARD-GATE>
+STOP. Before marking project complete, you MUST:
+- [ ] Write `.10x/decisions/devops.md` — CI/CD, deploy strategy, rollback plan
+- [ ] Write `.10x/decisions/sre.md` — SLOs, monitoring, alerts, runbook
+- [ ] Update `.10x/status.md` — phase: Delivery Complete, final sign-off
+- [ ] Update `.10x/handoff.md` — runbook location, dashboard URLs, escalation path
+- [ ] Commit state files: `state(delivery): phase 6 complete`
+Project is NOT done until ops readiness is documented.
+</HARD-GATE>
 
 ---
 
@@ -351,15 +430,15 @@ Wait for the user's response. Only proceed to implementation once approved.
 Not every task needs all phases at full depth. Scale the process:
 
 **Large feature (days-weeks):**
-Full brainstorming with design doc. All 6 phases at full depth. Spec → plan → staged rollout.
+Full brainstorming with design doc. All 6 phases at full depth. Spec → plan → staged rollout. All decision files written.
 
 **Medium task (hours-day):**
-Quick brainstorm (3-5 questions), light design (approach + trade-offs), implement, test, deploy. 5-10 minutes of thinking, then code.
+Quick brainstorm (3-5 questions), light design (approach + trade-offs), implement, test, deploy. 5-10 minutes of thinking, then code. Write at minimum: `architect.md`, `sde.md`, `status.md`.
 
 **Small fix (minutes-hour):**
-Read the code, understand the bug, quick brainstorm ("what could go wrong?"), think about edge cases (QA), check for security implications, fix, test, commit. 2-3 minutes of thinking, then code.
+Read the code, understand the bug, quick brainstorm ("what could go wrong?"), think about edge cases (QA), check for security implications, fix, test, commit. Write at minimum: `sde.md`, `status.md`. 2-3 minutes of thinking, then code.
 
-**The rule:** The brainstorming and thinking time scales down, but never to zero. Even a one-line fix deserves "what could go wrong?"
+**The rule:** The brainstorming and thinking time scales down, but never to zero. Even a one-line fix deserves "what could go wrong?" State writing scales down too, but `sde.md` and `status.md` are ALWAYS written.
 
 ## Role Switching Rules
 
@@ -369,9 +448,21 @@ Read the code, understand the bug, quick brainstorm ("what could go wrong?"), th
 - **Escalate when stuck.** If an implementation problem reveals a design flaw, go back to Architect. If a design question reveals a scope question, go back to PM/CTO. Going back is not failure — it's how teams avoid building the wrong thing.
 - **Return to brainstorming when scope changes.** If during implementation the user wants to add significant new functionality, pause and brainstorm the addition before coding it.
 
+## Self-Check: Am I Forgetting State?
+
+Ask yourself at every natural pause point:
+- "Did I write the decision files for the phase I just completed?"
+- "Is status.md current?"
+- "If I lost context right now, could the next role pick up from handoff.md?"
+
+If the answer to any is NO — stop what you're doing and write state NOW, before continuing.
+
+This is especially important during Phase 4 (Implementation) when coding momentum makes it easy to forget. After every major feature or task completion, pause and update state.
+
 ## Key Principles
 
 - **Brainstorm before building** — every project starts with understanding, not coding
+- **State before progress** — write decisions before moving to the next phase
 - **One question at a time** — don't overwhelm with multiple questions during brainstorming
 - **Multiple choice preferred** — easier to answer than open-ended when possible
 - **YAGNI ruthlessly** — remove unnecessary features from all designs
@@ -382,6 +473,15 @@ Read the code, understand the bug, quick brainstorm ("what could go wrong?"), th
 - **One concern at a time** — don't mix strategy, design, and implementation in one step
 - **Going back is good** — discovering a problem in Phase 4 that sends you back to Phase 0 is a win, not a failure
 - **Ship incrementally** — working software over comprehensive documentation
+
+## Anti-Patterns to Flag
+
+- Skipping state files because "I'll do it later" (you won't)
+- Writing code without `architect.md` existing
+- Finishing implementation without `sde.md` documenting what was built
+- Marking a project done without `qa.md` and `security.md`
+- Having stale `status.md` that doesn't reflect actual progress
+- Phase 5 and 6 getting skipped because "it works on my machine"
 
 ## Tone
 

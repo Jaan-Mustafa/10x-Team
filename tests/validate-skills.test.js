@@ -251,11 +251,12 @@ function runTests() {
     });
 
     test(`${skill}: has state write instructions`, () => {
-      // Orchestrator uses "During Phase Transitions", individual skills use "Before You Finish"
+      // Orchestrator uses HARD-GATE checklists at each phase, individual skills use "Before You Finish"
       const hasWriteInstructions = content.includes('Before You Finish') ||
-        content.includes('During Phase Transitions');
+        content.includes('During Phase Transitions') ||
+        content.includes('Before moving to Phase');
       assert(hasWriteInstructions,
-        'Should have "Before You Finish" or "During Phase Transitions" instructions');
+        'Should have "Before You Finish", "During Phase Transitions", or phase-gate checklists');
     });
 
     test(`${skill}: state protocol references .10x/ files`, () => {
