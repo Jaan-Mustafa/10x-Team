@@ -116,19 +116,37 @@ Follow what's already in the codebase. When in doubt:
 
 ## Project State Protocol
 
+State lives in a **folder per role**, not a single file. Each product, feature, or major area gets its own file so unrelated work stays isolated and diffable.
+
+```
+.10x/decisions/sde/
+  _index.md                # cross-cutting principles + active feature list
+  <feature-slug>.md        # one file per feature/area; kebab-case slug
+```
+
+Use a stable kebab-case `<feature-slug>` (e.g. `checkout-redesign`, `notifications-v2`). Pick it once and reuse it across roles so handoffs line up.
+
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
-2. If it exists, read **ALL decision files** in `.10x/decisions/` — SDE is the convergence point where all decisions become code. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them:
-   - `cto.md` (strategy), `product-manager.md` (requirements), `architect.md` (design), `staff-engineer.md` (patterns), `engineering-manager.md` (task list), `senior-engineer.md` (approach), `dba.md` (schema), `security.md` (constraints)
-3. Read `.10x/decisions/sde.md` — check your own past entries: what was built, deviations, tech debt flagged
+2. List `.10x/decisions/sde/` — read `_index.md` plus any per-feature files relevant to the current request (what was built, deviations, tech debt flagged). If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them. If only a legacy `.10x/decisions/sde.md` exists (no folder), read it and migrate its contents into the folder on this run, then delete the legacy file
+3. SDE is the convergence point where all decisions become code. For each upstream role, list its folder and read `_index.md` plus the per-feature file matching the current `<feature-slug>`:
+   - `.10x/decisions/cto/` (strategy)
+   - `.10x/decisions/product-manager/` (requirements)
+   - `.10x/decisions/architect/` (design)
+   - `.10x/decisions/staff-engineer/` (patterns)
+   - `.10x/decisions/engineering-manager/` (task list)
+   - `.10x/decisions/senior-engineer/` (approach)
+   - `.10x/decisions/dba/` (schema)
+   - `.10x/decisions/security/` (constraints)
 4. Read `.10x/status.md` — understand current phase, find your assigned tasks. Check which of your tasks are done vs remaining
 5. Read `.10x/handoff.md` — understand context passed from Senior Engineer. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions/sde.md`** — what was actually built, deviations from plan, tech debt created
-2. **Update `.10x/status.md`** — mark your tasks as done or in-progress, update task progress
-3. **Write to `.10x/handoff.md`** — pass what was built, what to test, what to review to QA and Security Engineer. Move current handoff to History section, write new Current Handoff
-4. Commit state files: `state(sde): [what changed]`
+1. **Write to `.10x/decisions/sde/<feature-slug>.md`** — what was actually built for this feature, deviations from plan, tech debt created. Create the folder if missing. One file per feature — never bundle unrelated features
+2. **Update `.10x/decisions/sde/_index.md`** — list of active features (slug, one-line description, status), plus cross-cutting SDE notes that aren't tied to one feature
+3. **Update `.10x/status.md`** — mark your tasks as done or in-progress, update task progress
+4. **Write to `.10x/handoff.md`** — pass what was built, what to test, what to review to QA and Security Engineer, referencing the specific per-feature file path(s). Move current handoff to History section, write new Current Handoff
+5. Commit state files: `state(sde): [what changed]`
 
 ## Tone
 

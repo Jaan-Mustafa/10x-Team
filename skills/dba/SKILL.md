@@ -123,20 +123,29 @@ For any schema change in production:
 
 ## Project State Protocol
 
+State lives in a **folder per role**, not a single file. Each product, feature, or major area gets its own file so unrelated work stays isolated and diffable.
+
+```
+.10x/decisions/dba/
+  _index.md                # cross-cutting principles + active feature list
+  <feature-slug>.md        # one file per feature/area; kebab-case slug
+```
+
+Use a stable kebab-case `<feature-slug>` (e.g. `checkout-redesign`, `notifications-v2`). Pick it once and reuse it across roles so handoffs line up.
+
 ### Before You Start (EVERY time)
 1. Check if `.10x/` directory exists in the project root. If it doesn't exist but code does, stop — run `/10x-team` first to trigger Discovery Protocol
-2. If it exists, read `.10x/decisions/dba.md` — check your own past entries: schema designed, indexes added, migration risks flagged. If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them
-3. Read `.10x/decisions/architect.md` — Architect data flow decisions
-4. Read `.10x/decisions/product-manager.md` — PM data requirements
-5. Read `.10x/decisions/sde.md` — SDE progress, what queries are being written
-6. Read `.10x/status.md` — understand current project phase and progress. Check if migrations you planned were executed safely
-7. Read `.10x/handoff.md` — understand context from Architect or SDE. Check Handoff History for your previous handoffs
+2. List `.10x/decisions/dba/` — read `_index.md` plus any per-feature files relevant to the current request (schema designed, indexes added, migration risks flagged). If entries are tagged `[DISCOVERED]`, verify them against actual code before relying on them. If only a legacy `.10x/decisions/dba.md` exists (no folder), read it and migrate its contents into the folder on this run, then delete the legacy file
+3. For upstream context, list `.10x/decisions/architect/` (data flow decisions), `.10x/decisions/product-manager/` (data requirements), and `.10x/decisions/sde/` (progress, what queries are being written) — read `_index.md` and the per-feature file matching the current `<feature-slug>` in each
+4. Read `.10x/status.md` — understand current project phase and progress. Check if migrations you planned were executed safely
+5. Read `.10x/handoff.md` — understand context from Architect or SDE. Check Handoff History for your previous handoffs
 
 ### Before You Finish (EVERY time)
-1. **Write to `.10x/decisions/dba.md`** — your decisions: schema design, indexing strategy, migration plan, query optimization notes
-2. **Update `.10x/status.md`** — mark your tasks done, flag any migration risks
-3. **Write to `.10x/handoff.md`** — pass schema file paths, migration commands, performance notes to SDE and SRE. Move current handoff to History section, write new Current Handoff
-4. Commit state files: `state(dba): [what changed]`
+1. **Write to `.10x/decisions/dba/<feature-slug>.md`** — your decisions for this feature: schema design, indexing strategy, migration plan, query optimization notes. Create the folder if missing. One file per feature — never bundle unrelated features
+2. **Update `.10x/decisions/dba/_index.md`** — list of active features (slug, one-line description, status), plus cross-cutting DBA principles that aren't tied to one feature
+3. **Update `.10x/status.md`** — mark your tasks done, flag any migration risks
+4. **Write to `.10x/handoff.md`** — pass schema file paths, migration commands, performance notes to SDE and SRE, referencing the specific per-feature file path(s). Move current handoff to History section, write new Current Handoff
+5. Commit state files: `state(dba): [what changed]`
 
 ## Tone
 

@@ -19,13 +19,13 @@ Do NOT write any code, scaffold any project, or take any implementation action u
 You MUST write state files BEFORE moving to the next phase. This is NON-NEGOTIABLE.
 
 After EVERY phase, STOP and do this:
-1. Write decisions to `.10x/decisions/<role>.md`
+1. Write decisions to `.10x/decisions/<role>/<feature-slug>.md` (and update that role's `_index.md`)
 2. Update `.10x/status.md` with phase completion
 3. Update `.10x/handoff.md` with context for the next role
 4. Commit state files
 
-If you catch yourself writing code without having written `decisions/architect.md` — STOP. Go back. Write the decisions first.
-If you catch yourself at Phase 5 without `decisions/sde.md` — STOP. Go back. Write what was built first.
+If you catch yourself writing code without having written `decisions/architect/<feature-slug>.md` — STOP. Go back. Write the decisions first.
+If you catch yourself at Phase 5 without `decisions/sde/<feature-slug>.md` — STOP. Go back. Write what was built first.
 
 The state files ARE the team's memory. Without them, you're a solo developer, not a team.
 </HARD-GATE>
@@ -56,37 +56,59 @@ The difference between a solo developer and a team is that a team covers blind s
 The orchestrator manages the shared state across all phases. This is how roles communicate across conversations.
 
 ### Folder Structure
+
+State lives in a **folder per role**, not a single flat file. Each product, feature, or major area gets its own file inside the role's folder, plus an `_index.md` with cross-cutting principles and the active feature list. Use a stable kebab-case `<feature-slug>` (e.g. `checkout-redesign`) so handoffs line up across roles.
+
 ```
 .10x/
-├── status.md                    # phase tracking + task progress
-├── handoff.md                   # current role-to-role context
-├── decisions/                   # one file per role
-│   ├── cto.md                   # strategy, build/buy, tech stack
-│   ├── product-manager.md       # requirements, scope, user stories
-│   ├── architect.md             # system design, components, boundaries
-│   ├── staff-engineer.md        # patterns, standards, cross-cutting
-│   ├── engineering-manager.md   # task breakdown, estimates, sequencing
-│   ├── senior-engineer.md       # implementation approach, code review
-│   ├── sde.md                   # what was built, deviations, tech debt
-│   ├── dba.md                   # schema, migrations, indexing
-│   ├── security.md              # threat model, vulnerabilities, auth
-│   ├── qa.md                    # test results, bugs, coverage
-│   ├── devops.md                # CI/CD, deploy strategy, rollback
-│   └── sre.md                   # SLOs, monitoring, runbooks
-├── specs/                       # design docs from brainstorming
+├── status.md                        # phase tracking + task progress
+├── handoff.md                       # current role-to-role context
+├── decisions/                       # one folder per role
+│   ├── cto/                         # strategy, build/buy, tech stack
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── product-manager/             # requirements, scope, user stories
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── architect/                   # system design, components, boundaries
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── staff-engineer/              # patterns, standards, cross-cutting
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── engineering-manager/         # task breakdown, estimates, sequencing
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── senior-engineer/             # implementation approach, code review
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── sde/                         # what was built, deviations, tech debt
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── dba/                         # schema, migrations, indexing
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── security/                    # threat model, vulnerabilities, auth
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── qa/                          # test results, bugs, coverage
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   ├── devops/                      # CI/CD, deploy strategy, rollback
+│   │   ├── _index.md
+│   │   └── <feature-slug>.md
+│   └── sre/                         # SLOs, monitoring, runbooks
+│       ├── _index.md
+│       └── <feature-slug>.md
+├── specs/                           # design docs from brainstorming
 │   └── YYYY-MM-DD-feature.md
-└── reviews/                     # QA reports + security audits
+└── reviews/                         # QA reports + security audits
     └── YYYY-MM-DD-review.md
 ```
 
 ### At Project Start
 1. Check if `.10x/` directory exists
-2. **If `.10x/` exists** — read state files to understand where the project stands:
-   - `.10x/decisions/` — read role-specific decision files relevant to current phase
-   - `.10x/status.md` — current phase, task progress, blockers
-   - `.10x/handoff.md` — context from the last active role
-   - `.10x/specs/` — approved design documents
-   - `.10x/reviews/` — QA reports and security audits
+2. **If `.10x/` exists** — read state files to understand where the project stands. For each role folder (`.10x/decisions/cto/`, `.10x/decisions/product-manager/`, `.10x/decisions/architect/`, `.10x/decisions/staff-engineer/`, `.10x/decisions/engineering-manager/`, `.10x/decisions/senior-engineer/`, `.10x/decisions/sde/`, `.10x/decisions/dba/`, `.10x/decisions/security/`, `.10x/decisions/qa/`, `.10x/decisions/devops/`, `.10x/decisions/sre/`), read `_index.md` plus any per-feature file matching the current `<feature-slug>`. If any legacy flat file `.10x/decisions/<role>.md` is found, read it and migrate its contents into the matching folder, then delete the legacy file. Also read `.10x/status.md` (current phase, task progress, blockers), `.10x/handoff.md` (context from the last active role), `.10x/specs/` (approved design documents), and `.10x/reviews/` (QA reports and security audits)
 3. **If `.10x/` does NOT exist** — check if source code already exists (package.json, src/, config files, etc.)
    - **No code exists** → fresh project. Create `.10x/` with the folder structure above and proceed to Phase 0 (Brainstorming)
    - **Code exists** → joining mid-project. Run the **Discovery Protocol** below before proceeding
@@ -113,14 +135,14 @@ When `.10x/` doesn't exist but the codebase already has code, you must understan
 - Look for open issues or TODOs in code
 
 **Step 4: Create `.10x/` and pre-populate decisions**
-- Create the folder structure
-- Write what you found to the relevant decision files:
-  - `decisions/cto.md` — tech stack found, architecture style observed
-  - `decisions/architect.md` — component structure, boundaries, data flow discovered
-  - `decisions/staff-engineer.md` — coding patterns, conventions found
-  - `decisions/dba.md` — schema, database choice, migration state
-  - `decisions/devops.md` — CI/CD, deployment setup found
-  - `decisions/sde.md` — what's been built so far
+- Create the folder structure (one folder per role under `.10x/decisions/`)
+- Write what you found to `_index.md` inside each relevant role folder (cross-cutting observations) plus a `<feature-slug>.md` per distinct product/area you identify:
+  - `decisions/cto/` — tech stack found, architecture style observed
+  - `decisions/architect/` — component structure, boundaries, data flow discovered
+  - `decisions/staff-engineer/` — coding patterns, conventions found
+  - `decisions/dba/` — schema, database choice, migration state
+  - `decisions/devops/` — CI/CD, deployment setup found
+  - `decisions/sde/` — what's been built so far
 - Mark all pre-populated decisions with `[DISCOVERED]` tag so roles know these were reverse-engineered, not actively decided
 - Set `.10x/status.md` phase to "Discovery Complete"
 
@@ -288,8 +310,8 @@ Wait for the user's response. Only proceed to implementation once approved.
 
 <HARD-GATE>
 STOP. Before moving to Phase 2, you MUST:
-- [ ] Write `.10x/decisions/cto.md` — strategy, build/buy verdict, tech direction
-- [ ] Write `.10x/decisions/product-manager.md` — scope, user stories, success criteria
+- [ ] Write `.10x/decisions/cto/<feature-slug>.md` and update `.10x/decisions/cto/_index.md` — strategy, build/buy verdict, tech direction
+- [ ] Write `.10x/decisions/product-manager/<feature-slug>.md` and update `.10x/decisions/product-manager/_index.md` — scope, user stories, success criteria
 - [ ] Update `.10x/status.md` — phase: Strategy Complete
 - [ ] Update `.10x/handoff.md` — context for Architect
 - [ ] Commit state files: `state(strategy): phase 1 complete`
@@ -312,8 +334,8 @@ DO NOT proceed to Design until all boxes are checked.
 
 <HARD-GATE>
 STOP. Before moving to Phase 3, you MUST:
-- [ ] Write `.10x/decisions/architect.md` — system design, components, boundaries, failure modes
-- [ ] Write `.10x/decisions/staff-engineer.md` — patterns, standards, cross-cutting concerns
+- [ ] Write `.10x/decisions/architect/<feature-slug>.md` and update `.10x/decisions/architect/_index.md` — system design, components, boundaries, failure modes
+- [ ] Write `.10x/decisions/staff-engineer/<feature-slug>.md` and update `.10x/decisions/staff-engineer/_index.md` — patterns, standards, cross-cutting concerns
 - [ ] Update `.10x/status.md` — phase: Design Complete
 - [ ] Update `.10x/handoff.md` — context for EM
 - [ ] Commit state files: `state(design): phase 2 complete`
@@ -336,8 +358,8 @@ DO NOT proceed to Planning until all boxes are checked.
 
 <HARD-GATE>
 STOP. Before moving to Phase 4, you MUST:
-- [ ] Write `.10x/decisions/engineering-manager.md` — task breakdown, estimates, sequencing
-- [ ] Write `.10x/decisions/senior-engineer.md` — implementation approach per task
+- [ ] Write `.10x/decisions/engineering-manager/<feature-slug>.md` and update `.10x/decisions/engineering-manager/_index.md` — task breakdown, estimates, sequencing
+- [ ] Write `.10x/decisions/senior-engineer/<feature-slug>.md` and update `.10x/decisions/senior-engineer/_index.md` — implementation approach per task
 - [ ] Update `.10x/status.md` — phase: Planning Complete, full task list added
 - [ ] Update `.10x/handoff.md` — ordered task list for SDE
 - [ ] Commit state files: `state(planning): phase 3 complete`
@@ -365,8 +387,8 @@ DO NOT write any code until all boxes are checked.
 
 <HARD-GATE>
 STOP. Before moving to Phase 5, you MUST:
-- [ ] Write `.10x/decisions/sde.md` — what was built, deviations from plan, tech debt created
-- [ ] Write `.10x/decisions/dba.md` — schema design, indexing, migration notes (if applicable)
+- [ ] Write `.10x/decisions/sde/<feature-slug>.md` and update `.10x/decisions/sde/_index.md` — what was built, deviations from plan, tech debt created
+- [ ] Write `.10x/decisions/dba/<feature-slug>.md` and update `.10x/decisions/dba/_index.md` — schema design, indexing, migration notes (if applicable)
 - [ ] Update `.10x/status.md` — mark implementation tasks done
 - [ ] Update `.10x/handoff.md` — what was built, what to test, what to review
 - [ ] Commit state files: `state(implementation): phase 4 complete`
@@ -389,8 +411,8 @@ DO NOT skip verification. QA and Security MUST review what was built.
 
 <HARD-GATE>
 STOP. Before moving to Phase 6, you MUST:
-- [ ] Write `.10x/decisions/qa.md` — test strategy, coverage, bugs found, quality gates
-- [ ] Write `.10x/decisions/security.md` — threat model, vulnerabilities, auth review
+- [ ] Write `.10x/decisions/qa/<feature-slug>.md` and update `.10x/decisions/qa/_index.md` — test strategy, coverage, bugs found, quality gates
+- [ ] Write `.10x/decisions/security/<feature-slug>.md` and update `.10x/decisions/security/_index.md` — threat model, vulnerabilities, auth review
 - [ ] Write QA report to `.10x/reviews/YYYY-MM-DD-qa-report.md`
 - [ ] Write security audit to `.10x/reviews/YYYY-MM-DD-security-review.md`
 - [ ] Update `.10x/status.md` — test results, security status, release readiness
@@ -415,8 +437,8 @@ DO NOT ship without QA and Security sign-off.
 
 <HARD-GATE>
 STOP. Before marking project complete, you MUST:
-- [ ] Write `.10x/decisions/devops.md` — CI/CD, deploy strategy, rollback plan
-- [ ] Write `.10x/decisions/sre.md` — SLOs, monitoring, alerts, runbook
+- [ ] Write `.10x/decisions/devops/<feature-slug>.md` and update `.10x/decisions/devops/_index.md` — CI/CD, deploy strategy, rollback plan
+- [ ] Write `.10x/decisions/sre/<feature-slug>.md` and update `.10x/decisions/sre/_index.md` — SLOs, monitoring, alerts, runbook
 - [ ] Update `.10x/status.md` — phase: Delivery Complete, final sign-off
 - [ ] Update `.10x/handoff.md` — runbook location, dashboard URLs, escalation path
 - [ ] Commit state files: `state(delivery): phase 6 complete`
@@ -477,9 +499,9 @@ This is especially important during Phase 4 (Implementation) when coding momentu
 ## Anti-Patterns to Flag
 
 - Skipping state files because "I'll do it later" (you won't)
-- Writing code without `architect.md` existing
-- Finishing implementation without `sde.md` documenting what was built
-- Marking a project done without `qa.md` and `security.md`
+- Writing code without `architect/<feature-slug>.md` existing
+- Finishing implementation without `sde/<feature-slug>.md` documenting what was built
+- Marking a project done without `qa/<feature-slug>.md` and `security/<feature-slug>.md`
 - Having stale `status.md` that doesn't reflect actual progress
 - Phase 5 and 6 getting skipped because "it works on my machine"
 
