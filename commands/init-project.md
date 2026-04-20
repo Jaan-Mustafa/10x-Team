@@ -6,7 +6,11 @@ Set up the shared project state files that enable communication between all 10x-
 
 1. **Check if state already exists** — Look for a `.10x/` directory in the project root. If it exists, tell the user and ask if they want to reset it.
 
-2. **Create the `.10x/` directory** and three state files:
+2. **Create the `.10x/` directory**, the `adrs/` subfolder, and three state files:
+
+### `.10x/adrs/` directory
+
+Create this folder for Architecture Decision Records. Add a `.gitkeep` file so it's tracked by git. ADRs will be written here during the Design phase before any implementation begins.
 
 ### `.10x/decisions.md`
 

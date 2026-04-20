@@ -100,6 +100,8 @@ State lives in a **folder per role**, not a single flat file. Each product, feat
 │   └── sre/                         # SLOs, monitoring, runbooks
 │       ├── _index.md
 │       └── <feature-slug>.md
+├── adrs/                            # Architecture Decision Records (MANDATORY before implementation)
+│   └── NNN-<title>.md
 ├── specs/                           # design docs from brainstorming
 │   └── YYYY-MM-DD-feature.md
 └── reviews/                         # QA reports + security audits
@@ -330,16 +332,67 @@ DO NOT proceed to Design until all boxes are checked.
 - Are there cross-cutting concerns (logging, auth, error handling)?
 - What existing code can we reuse?
 
-**Output:** Architecture decision, component design, data flow.
+**Output:** Architecture decision, component design, data flow, **and an ADR**.
+
+### ADR (Architecture Decision Record) — MANDATORY
+
+Every feature MUST have an ADR written during this phase. The ADR captures the architectural decision so future contributors understand not just WHAT was built, but WHY it was built that way.
+
+**Where:** `.10x/adrs/NNN-<short-title>.md` (NNN = next sequential number, e.g. `001-event-driven-payments.md`)
+
+**ADR Template:**
+
+```markdown
+# ADR-NNN: <Title>
+
+**Status:** Proposed | Accepted | Superseded by ADR-NNN
+**Date:** YYYY-MM-DD
+**Feature:** <feature-slug>
+**Author:** 10x-Team (Architect + Staff Engineer)
+
+## Context
+What is the problem or situation that requires a decision? Include relevant constraints, requirements, and forces at play.
+
+## Decision
+What is the architectural decision that was made? Be specific about the approach chosen.
+
+## Alternatives Considered
+| Alternative | Pros | Cons | Why Not |
+|-------------|------|------|---------|
+| Option A | ... | ... | ... |
+| Option B | ... | ... | ... |
+
+## Consequences
+
+### Positive
+- What becomes easier or better because of this decision?
+
+### Negative
+- What becomes harder or worse? What trade-offs are we accepting?
+
+### Risks
+- What could go wrong? What are the mitigation strategies?
+
+## Dependencies
+- What does this decision depend on?
+- What future decisions does this constrain?
+```
+
+**Rules for ADRs:**
+- One ADR per significant architectural decision (a feature may have multiple ADRs)
+- ADRs are immutable once accepted — if a decision changes, write a new ADR that supersedes the old one
+- Every ADR must have at least one alternative considered — if you can't think of alternatives, you haven't thought enough
+- ADRs are committed as part of the Design phase checkpoint
 
 <HARD-GATE>
 STOP. Before moving to Phase 3, you MUST:
+- [ ] Write ADR(s) to `.10x/adrs/NNN-<title>.md` — architectural decisions with context, alternatives, and consequences
 - [ ] Write `.10x/decisions/architect/<feature-slug>.md` and update `.10x/decisions/architect/_index.md` — system design, components, boundaries, failure modes
 - [ ] Write `.10x/decisions/staff-engineer/<feature-slug>.md` and update `.10x/decisions/staff-engineer/_index.md` — patterns, standards, cross-cutting concerns
 - [ ] Update `.10x/status.md` — phase: Design Complete
-- [ ] Update `.10x/handoff.md` — context for EM
-- [ ] Commit state files: `state(design): phase 2 complete`
-DO NOT proceed to Planning until all boxes are checked.
+- [ ] Update `.10x/handoff.md` — context for EM, reference ADR number(s)
+- [ ] Commit state files: `state(design): phase 2 complete — ADR-NNN written`
+DO NOT proceed to Planning until all boxes are checked. NO ADR = NO IMPLEMENTATION.
 </HARD-GATE>
 
 ## Phase 3: Planning — How Do We Deliver It?
@@ -367,6 +420,10 @@ DO NOT write any code until all boxes are checked.
 </HARD-GATE>
 
 ## Phase 4: Implementation — Write the Code
+
+<HARD-GATE>
+BEFORE writing any code, verify that ADR(s) exist in `.10x/adrs/`. If no ADR exists for the feature being implemented — STOP. Go back to Phase 2 and write the ADR first. This is non-negotiable regardless of task size or perceived simplicity.
+</HARD-GATE>
 
 **Think as SDE:**
 - Write clean, tested code following existing patterns
@@ -452,15 +509,15 @@ Project is NOT done until ops readiness is documented.
 Not every task needs all phases at full depth. Scale the process:
 
 **Large feature (days-weeks):**
-Full brainstorming with design doc. All 6 phases at full depth. Spec → plan → staged rollout. All decision files written.
+Full brainstorming with design doc. All 6 phases at full depth. Spec → ADR(s) → plan → staged rollout. All decision files written. Full ADR with alternatives analysis.
 
 **Medium task (hours-day):**
-Quick brainstorm (3-5 questions), light design (approach + trade-offs), implement, test, deploy. 5-10 minutes of thinking, then code. Write at minimum: `architect.md`, `sde.md`, `status.md`.
+Quick brainstorm (3-5 questions), light design (approach + trade-offs), implement, test, deploy. 5-10 minutes of thinking, then code. Write at minimum: `architect.md`, `sde.md`, `status.md`, and a lightweight ADR (Context + Decision + one alternative is enough).
 
 **Small fix (minutes-hour):**
-Read the code, understand the bug, quick brainstorm ("what could go wrong?"), think about edge cases (QA), check for security implications, fix, test, commit. Write at minimum: `sde.md`, `status.md`. 2-3 minutes of thinking, then code.
+Read the code, understand the bug, quick brainstorm ("what could go wrong?"), think about edge cases (QA), check for security implications, fix, test, commit. Write at minimum: `sde.md`, `status.md`. A mini ADR is still required if the fix changes architectural behavior (e.g., switching a library, changing data flow, altering an API contract). Pure bug fixes that don't change architecture can skip the ADR.
 
-**The rule:** The brainstorming and thinking time scales down, but never to zero. Even a one-line fix deserves "what could go wrong?" State writing scales down too, but `sde.md` and `status.md` are ALWAYS written.
+**The rule:** The brainstorming and thinking time scales down, but never to zero. Even a one-line fix deserves "what could go wrong?" State writing scales down too, but `sde.md` and `status.md` are ALWAYS written. ADRs are required for any work that changes how the system is structured — the depth scales, but the requirement doesn't go away.
 
 ## Role Switching Rules
 
@@ -499,6 +556,7 @@ This is especially important during Phase 4 (Implementation) when coding momentu
 ## Anti-Patterns to Flag
 
 - Skipping state files because "I'll do it later" (you won't)
+- Writing code without an ADR in `.10x/adrs/` — this is the #1 gate violation
 - Writing code without `architect/<feature-slug>.md` existing
 - Finishing implementation without `sde/<feature-slug>.md` documenting what was built
 - Marking a project done without `qa/<feature-slug>.md` and `security/<feature-slug>.md`
